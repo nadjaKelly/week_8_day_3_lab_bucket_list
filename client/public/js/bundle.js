@@ -91,9 +91,42 @@
   !*** ./client/src/app.js ***!
   \***************************/
 /*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+eval("\nconst Goals = __webpack_require__(/*! ./models/goals.js */ \"./client/src/models/goals.js\");\n\n\ndocument.addEventListener('DOMContentLoaded', () => {\nconsole.log(\"js loaded\");\n\n\n\n\n\n\nconst goals = new Goals();\n  goals.bindEvents();\n  goals.getData();\n\n\n\n});\n\n\n//# sourceURL=webpack:///./client/src/app.js?");
+
+/***/ }),
+
+/***/ "./client/src/helpers/pub_sub.js":
+/*!***************************************!*\
+  !*** ./client/src/helpers/pub_sub.js ***!
+  \***************************************/
+/*! no static exports found */
 /***/ (function(module, exports) {
 
-eval("\n\n\n\ndocument.addEventListener('DOMContentLoaded', () => {\nconsole.log(\"js loaded\");\n});\n\n\n//# sourceURL=webpack:///./client/src/app.js?");
+eval("const PubSub = {\n  publish: function (channel, payload) {\n    const event = new CustomEvent(channel, {\n      detail: payload\n    });\n    document.dispatchEvent(event);\n  },\n\n  subscribe: function (channel, callback) {\n    document.addEventListener(channel, callback);\n  }\n};\n\nmodule.exports = PubSub;\n\n\n//# sourceURL=webpack:///./client/src/helpers/pub_sub.js?");
+
+/***/ }),
+
+/***/ "./client/src/helpers/request_helper.js":
+/*!**********************************************!*\
+  !*** ./client/src/helpers/request_helper.js ***!
+  \**********************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+eval("const RequestHelper = function (url) {\n  this.url = url;\n};\n\nRequestHelper.prototype.get = function () {\n  return fetch(this.url)\n    .then((response) => response.json());\n};\n\nRequestHelper.prototype.post = function (payload) {\n  return fetch(this.url, {\n    method: 'POST',\n    body: JSON.stringify(payload),\n    headers: { 'Content-Type': 'application/json' }\n  })\n    .then((response) => response.json());\n};\n\nRequestHelper.prototype.delete = function (id) {\n  return fetch(`${this.url}/${id}`, {\n    method: 'DELETE'\n  })\n    .then((response) => response.json());\n};\n\nmodule.exports = RequestHelper;\n\n\n//# sourceURL=webpack:///./client/src/helpers/request_helper.js?");
+
+/***/ }),
+
+/***/ "./client/src/models/goals.js":
+/*!************************************!*\
+  !*** ./client/src/models/goals.js ***!
+  \************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+eval("const RequestHelper = __webpack_require__(/*! ../helpers/request_helper.js */ \"./client/src/helpers/request_helper.js\");\nconst PubSub = __webpack_require__(/*! ../helpers/pub_sub.js */ \"./client/src/helpers/pub_sub.js\");\n\nconst Goals = function (url) {\n  this.url = 'http://localhost:3000/api/goals';\n  this.request = new RequestHelper(this.url);\n};\n\nGoals.prototype.bindEvents = function () {\n\n  // PubSub.subscribe('SightingView:sighting-delete-clicked', (evt) => {\n  //   this.deleteSighting(evt.detail);\n  };\n\nGoals.prototype.getData = function () {\n  this.request.get()\n    .then((goals) => {\n      PubSub.publish('Goals:data-loaded', goals);\n    })\n    .catch(console.error);\n};\n\n\n\n\nmodule.exports = Goals;\n\n\n//# sourceURL=webpack:///./client/src/models/goals.js?");
 
 /***/ })
 
