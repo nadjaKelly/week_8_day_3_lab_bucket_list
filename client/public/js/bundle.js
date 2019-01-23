@@ -93,7 +93,7 @@
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-eval("\nconst Goals = __webpack_require__(/*! ./models/goals.js */ \"./client/src/models/goals.js\");\n\n\ndocument.addEventListener('DOMContentLoaded', () => {\nconsole.log(\"js loaded\");\n\n\n\n\n\n\nconst goals = new Goals();\n  goals.bindEvents();\n  goals.getData();\n\n\n\n});\n\n\n//# sourceURL=webpack:///./client/src/app.js?");
+eval("const GoalsFormView = __webpack_require__(/*! ./views/goals_form_view.js */ \"./client/src/views/goals_form_view.js\")\nconst Goals = __webpack_require__(/*! ./models/goals.js */ \"./client/src/models/goals.js\");\n\n\ndocument.addEventListener('DOMContentLoaded', () => {\nconsole.log(\"js loaded\");\n\n\n\n\n\n\nconst goals = new Goals();\n  goals.bindEvents();\n  goals.getData();\n\n\n\n});\n\n\n//# sourceURL=webpack:///./client/src/app.js?");
 
 /***/ }),
 
@@ -126,7 +126,18 @@ eval("const RequestHelper = function (url) {\n  this.url = url;\n};\n\nRequestHe
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-eval("const RequestHelper = __webpack_require__(/*! ../helpers/request_helper.js */ \"./client/src/helpers/request_helper.js\");\nconst PubSub = __webpack_require__(/*! ../helpers/pub_sub.js */ \"./client/src/helpers/pub_sub.js\");\n\nconst Goals = function (url) {\n  this.url = 'http://localhost:3000/api/goals';\n  this.request = new RequestHelper(this.url);\n};\n\nGoals.prototype.bindEvents = function () {\n\n  // PubSub.subscribe('SightingView:sighting-delete-clicked', (evt) => {\n  //   this.deleteSighting(evt.detail);\n  };\n\nGoals.prototype.getData = function () {\n  this.request.get()\n    .then((goals) => {\n      PubSub.publish('Goals:data-loaded', goals);\n    })\n    .catch(console.error);\n};\n\n\n\n\nmodule.exports = Goals;\n\n\n//# sourceURL=webpack:///./client/src/models/goals.js?");
+eval("const RequestHelper = __webpack_require__(/*! ../helpers/request_helper.js */ \"./client/src/helpers/request_helper.js\");\nconst PubSub = __webpack_require__(/*! ../helpers/pub_sub.js */ \"./client/src/helpers/pub_sub.js\");\n\nconst Goals = function () {\n  this.url = 'http://localhost:3000/api/goals';\n  this.request = new RequestHelper(this.url);\n};\n\nGoals.prototype.bindEvents = function () {\n\n  // PubSub.subscribe('SightingView:sighting-delete-clicked', (evt) => {\n  //   this.deleteSighting(evt.detail);\n  };\n\nGoals.prototype.getData = function () {\n  this.request.get()\n    .then((goals) => {\n      PubSub.publish('Goals:data-loaded', goals);\n    })\n    .catch(console.error);\n};\n\n\n\n\nmodule.exports = Goals;\n\n\n//# sourceURL=webpack:///./client/src/models/goals.js?");
+
+/***/ }),
+
+/***/ "./client/src/views/goals_form_view.js":
+/*!*********************************************!*\
+  !*** ./client/src/views/goals_form_view.js ***!
+  \*********************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+eval("const PubSub = __webpack_require__(/*! ../helpers/pub_sub.js */ \"./client/src/helpers/pub_sub.js\")\n\nconst GoalsFormView = function (form) {\n  this.form = form;\n};\n\nGoalsFormView.prototype.bindEvents = function () {\n  this.form.addEventListener('submit', (evt) => {\n    this.handleSubmit(evt);\n  });\n};\n\n// SightingFormView.prototype.handleSubmit = function (evt) {\n//   evt.preventDefault();\n//   const newSighting = this.createSighting(evt.target);\n//   PubSub.publish('SightingFormView:sighting-submitted', newSighting);\n//   evt.target.reset();\n// };\n\nGoalsFormView.prototype.createGoal = function (form) {\n  const newGoal = {\n    name: form.name.value,\n    location: form.location.value,\n    byAge: form.byAge.value\n  };\n\n  return newGoal;\n};\n\nmodule.exports = GoalsFormView;\n\n\n//# sourceURL=webpack:///./client/src/views/goals_form_view.js?");
 
 /***/ })
 

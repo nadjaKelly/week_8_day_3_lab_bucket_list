@@ -1,4 +1,4 @@
-
+const GoalsFormView = require('./views/goals_form_view.js')
 const Goals = require('./models/goals.js');
 
 
